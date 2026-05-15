@@ -29,20 +29,10 @@ fi
 mkdir -p "${SYSROOT_DIR}/usr"
 make -C linux ARCH=arm64 INSTALL_HDR_PATH="${SYSROOT_DIR}/usr" headers_install
 
-# --- 查找 compiler-rt builtins（提供 __multi3、__floatundidf 等运行时函数）---
-# Clang 没有 libgcc，这些低层函数由 compiler-rt 提供
-BUILTINS=$(find "${TOOLCHAIN}/lib/clang" -name "libclang_rt.builtins-aarch64-android.a" | head -1)
-if [ -z "${BUILTINS}" ]; then
-    echo "ERROR: compiler-rt builtins not found in NDK"
-    exit 1
-fi
-echo "Found compiler-rt builtins: ${BUILTINS}"
-
 # --- 设置交叉编译器 ---
 # NDK Clang 默认 target 是 Android，我们用 -target 改为 aarch64-linux-gnu
-# -rtlib=compiler-rt 告诉 Clang 链接 compiler-rt 而非 libgcc
-CC="${TOOLCHAIN}/bin/clang -target aarch64-linux-gnu --sysroot=${SYSROOT_DIR} -rtlib=compiler-rt"
-CXX="${TOOLCHAIN}/bin/clang++ -target aarch64-linux-gnu --sysroot=${SYSROOT_DIR} -rtlib=compiler-rt"
+CC="${TOOLCHAIN}/bin/clang -target aarch64-linux-gnu --sysroot=${SYSROOT_DIR}"
+CXX="${TOOLCHAIN}/bin/clang++ -target aarch64-linux-gnu --sysroot=${SYSROOT_DIR}"
 
 export CC CXX
 export AR="${TOOLCHAIN}/bin/llvm-ar"

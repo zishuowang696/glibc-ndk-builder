@@ -31,9 +31,8 @@ make -C linux ARCH=arm64 INSTALL_HDR_PATH="${SYSROOT_DIR}/usr" headers_install
 
 # --- 设置交叉编译器 ---
 # NDK Clang 默认 target 是 Android，我们用 -target 改为 aarch64-linux-gnu
-# -rtlib=compiler-rt: NDK Clang 没有 libgcc，用 LLVM 自带的 compiler-rt 提供运行时函数
-CC="${TOOLCHAIN}/bin/clang -target aarch64-linux-gnu --sysroot=${SYSROOT_DIR} -rtlib=compiler-rt --unwindlib=none"
-CXX="${TOOLCHAIN}/bin/clang++ -target aarch64-linux-gnu --sysroot=${SYSROOT_DIR} -rtlib=compiler-rt --unwindlib=none"
+CC="${TOOLCHAIN}/bin/clang -target aarch64-linux-gnu --sysroot=${SYSROOT_DIR}"
+CXX="${TOOLCHAIN}/bin/clang++ -target aarch64-linux-gnu --sysroot=${SYSROOT_DIR}"
 
 export CC CXX
 export AR="${TOOLCHAIN}/bin/llvm-ar"
